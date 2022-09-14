@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException, status
 from schemas.users import UserCreateSchema, UserSignInSchema
 
-user_router = APIRouter(tags=["User"], prefix="/user")
+auth_router = APIRouter(tags=["Authentication"])
 
 """ Create User Authentication """
 
 users = {}
 
 
-@user_router.post("/register")
+@auth_router.post("/register", status_code=status.HTTP_201_CREATED)
 async def create_user(data: UserCreateSchema):
     if data.email in users:
         raise HTTPException(
@@ -20,7 +20,7 @@ async def create_user(data: UserCreateSchema):
     return {"message": "User successfully registered!!!"}
 
 
-@user_router.post("/login")
+@auth_router.post("/login", status_code=status.HTTP_202_ACCEPTED)
 async def login_user(user: UserSignInSchema):
     if user.email not in users:
         raise HTTPException(
