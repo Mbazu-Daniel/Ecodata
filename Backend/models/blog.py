@@ -7,7 +7,7 @@ from database.connection import Base
 
 
 class Blog(Base):
-    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, server_default="gen_random_uuid()")
     title = Column(String, index=True, nullable=False)
     body = Column(String, index=True, nullable=False)
     image = Column(String, index=True, nullable=False)
