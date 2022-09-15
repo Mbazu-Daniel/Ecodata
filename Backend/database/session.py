@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 
 # database_connection_string = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
 
-# engine = create_engine(database_connection_string, echo=True)
+# engine = create_engine(database_connection_string, echo=True, pool_pre_ping=True)
 
 
 # SQLite database connection 
