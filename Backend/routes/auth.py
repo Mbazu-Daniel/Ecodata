@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from schemas.users import UserCreateSchema, UserSignInSchema
+from schemas.users import UserCreate, UserOut, UserSignInSchema
 
 auth_router = APIRouter(tags=["Authentication"])
 
@@ -9,7 +9,7 @@ users = {}
 
 
 @auth_router.post("/register", status_code=status.HTTP_201_CREATED)
-async def create_user(data: UserCreateSchema):
+async def create_user(data: UserCreate):
     if data.email in users:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -32,3 +32,8 @@ async def login_user(user: UserSignInSchema):
         )
 
     return {"message": "User signed in successfully"}
+
+
+@auth_router.get("/")
+def get_user():
+    return users

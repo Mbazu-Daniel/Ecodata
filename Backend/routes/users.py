@@ -1,34 +1,22 @@
 from fastapi import APIRouter, HTTPException, status
-from schemas.users import UserCreateSchema, UserSignInSchema
+from schemas.users import UserCreate, UserOut, UserSignInSchema
 
-user_router = APIRouter(tags=["User"], prefix="/user")
+user_router = APIRouter(tags=["User"])
 
-""" Create User Authentication """
+""" Create User Profile Details """
 
 users = {}
 
+# @user_router.get("/{id}", response_model = UserOut)
+# def get_user(id: int):
+#     for user in users:
+#         if user.id == id:
+#             return user
+#     raise HTTPException(
+#         status_code=status.HTTP_404_NOT_FOUND,
+#         detail=f"user with supplied id {id} does not exist",
+#     )
 
-@user_router.post("/register")
-async def create_user(data: UserCreateSchema):
-    if data.email in users:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"User with email {data.email} already exists",
-        )
-    users[data.email] = data
-
-    return {"message": "User successfully registered!!!"}
-
-
-@user_router.post("/login")
-async def login_user(user: UserSignInSchema):
-    if user.email not in users:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User does not exists"
-        )
-    if users[user.email].password != user.password:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Wrong credentials passed"
-        )
-
-    return {"message": "User signed in successfully"}
+@user_router.get("/")
+def get_user():
+    return users

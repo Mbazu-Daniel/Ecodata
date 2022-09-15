@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, Body, HTTPException
 from schemas.blog import BlogSchema
 from typing import List
 
-post_router = APIRouter(tags=["Post"], prefix="/post")
+post_router = APIRouter(tags=["Post"])
 
 posts = []
 
