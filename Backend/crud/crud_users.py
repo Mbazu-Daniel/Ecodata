@@ -37,20 +37,20 @@ class CRUDUser(CRUDBase[User,UserCreate,UserUpdate]):
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
 
-def authenticate(self, db: Session, *, email: str, password: str):
-    user = self.get_by_email(db, email=email)
-    
-    if not user:
-        return None
-    if not verify_password(password, user.hashed_password):
-        return None
-    return user
+    def authenticate(self, db: Session, *, email: str, password: str):
+        user = self.get_by_email(db, email=email)
 
-def is_active(self, user: User) -> bool:
-    return user.is_active
+        if not user:
+            return None
+        if not verify_password(password, user.hashed_password):
+            return None
+        return user
 
-def is_superuser(self, user: User) -> bool:
-        return user.is_superuser
+    def is_active(self, user: User) -> bool:
+        return user.is_active
+
+    def is_superuser(self, user: User) -> bool:
+            return user.is_superuser
 
 
 user = CRUDUser(User)
