@@ -10,12 +10,12 @@ from schemas.token import TokenPayload
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-SECRET_KEY = settings.secret_key
-ALGORITHM = settings.algorithm
-ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 
-def create_access_token(subject: Union[str, Any], expires_delta: timedelta= None):
+def create_access_token(subject: Union[str, Any], expires_delta: timedelta = None):
     if expires_delta:
         expire = datetime.utcnow()
     else:
@@ -27,11 +27,14 @@ def create_access_token(subject: Union[str, Any], expires_delta: timedelta= None
 
     return token
 
+
 """ This function is used to decode the access token created"""
+
+
 def verify_access_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        token_data = TokenPayload(**payload) # what does it mean to add ** in Python
+        token_data = TokenPayload(**payload)  # what does it mean to add ** in Python
 
     except (JWTError, ValidationError):
         raise HTTPException(
@@ -47,7 +50,9 @@ def verify_access_token(token: str):
 
 
 """ Creating Hash and Verifying hash """
-def verify_password(plain_password: str,  hashed_password: str):
+
+
+def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
