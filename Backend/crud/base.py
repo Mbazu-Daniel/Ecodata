@@ -1,13 +1,12 @@
-
-
 from pydantic import BaseModel
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
+from database.base_class import Base
 
 # Model is bound to the Base
-ModelType = TypeVar("ModelType",bound=Base)
+ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
@@ -26,7 +25,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     # CREATE Instance
-    def create(self, db:Session, *, obj_in: CreateSchemaType):
+    def create(self, db: Session, *, obj_in: CreateSchemaType):
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)
         db.add(db_obj)
@@ -35,23 +34,29 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_obj
 
     # READ Instance
-    def get_one(self, db:Session, id: Any):
+    def get_one(self, db: Session, id: Any):
         return db.query(self.model).filter(self.model.id == id).first()
 
     def get_multi(self, db: Session, *, skip: int = 0, limit: int = 100):
         return db.query(self.model).offset(skip).limit(limit).all()
 
     # UPDATE Instance
-    def update(self, db:Session,*, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]):
+    def update(
+        self,
+        db: Session,
+        *,
+        db_obj: ModelType,
+        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+    ):
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
             update_data = obj_in.dict(exclude_unset=True)
-        
+
         for field in obj_data:
             if field in update_data:
-                setattr(db_obj,field,update_data[field])
+                setattr(db_obj, field, update_data[field])
 
         db.add(db_obj)
         db.commit()
@@ -63,5 +68,3 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.delete(obj)
         db.commit()
         return obj
-
-            
