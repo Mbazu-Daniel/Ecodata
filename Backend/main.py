@@ -1,9 +1,9 @@
 from fastapi_offline import FastAPIOffline
 from fastapi import FastAPI
 import uvicorn
-from routes.users import user_router
-from routes.blog import post_router
-from routes.auth import auth_router
+from routes.api_v1.endpoints.users import user_router
+from routes.api_v1.endpoints.auth import auth_router
+from routes.api_v1.endpoints.blog import post_router
 
 app = FastAPIOffline()
 
