@@ -1,4 +1,3 @@
-
 """ This module is the Base database that our Model will inherit from so as to store the data in the database"""
 
 
@@ -15,5 +14,3 @@ class Base:
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
-
-
