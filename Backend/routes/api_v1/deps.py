@@ -2,7 +2,7 @@ from typing import Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError
+from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from models.users import User
@@ -19,6 +19,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 # start database connections
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -30,7 +31,9 @@ def get_db():
 """ Current authenticated user """
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail=f"Could not validate credentials",
@@ -40,7 +43,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     user = db.query(User).filter(User.id == token.id).first()
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return user
 
 
@@ -49,7 +54,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 def get_current_active_user(active_user: User = Depends(get_current_user)):
     if not user.is_active(active_user):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Inactive User")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Inactive User"
+        )
 
     return active_user
 
@@ -59,6 +66,8 @@ def get_current_active_user(active_user: User = Depends(get_current_user)):
 
 def get_current_active_superuser(super_user: User = Depends(get_current_user)):
     if not user.is_superuser(super_user):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="User does not not have superuser permission")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User does not not have superuser permission",
+        )
     return super_user
