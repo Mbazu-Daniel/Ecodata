@@ -9,6 +9,7 @@ class BlogBase(BaseModel):
     image: Optional[str] = None
     published: bool = True
 
+
 # Blog creation schema
 class BlogCreate(BlogBase):
     title: str
@@ -21,7 +22,7 @@ class BlogCreate(BlogBase):
                 "title": "Introduction to Economics",
                 "image": "https://linktomyimage.com/image.png",
                 "body": "Economics is the study of the nations wealth",
-                "published": True
+                "published": True,
             }
         }
 
@@ -38,7 +39,7 @@ class BlogUpdate(BlogBase):
                 "image": "https://linktomyimage.com/image.png",
                 "tags": ["Economics", "Micro Economics", "Macro Economics"],
                 "body": "Economics is the study of the nations wealth",
-                "published": True
+                "published": True,
             }
         }
 
@@ -49,16 +50,17 @@ class BlogUpdate(BlogBase):
 class BlogInDBBase(BlogBase):
     id: int
     title: str
-    owner_id: int 
-    
-    class Config: 
+    owner_id: int
+
+    class Config:
         orm_mode = True
-        
+
+
 # Properties stored in DB
 class BlogInDB(BlogInDBBase):
     pass
 
+
 # Properties to return to client
 class BlogSchema(BlogInDBBase):
     pass
-        

@@ -29,7 +29,7 @@ class UserCreate(UserBase):
                 "password": "Password#123",
                 "is_active": True,
                 "is_superuser": False,
-                "created_at": date
+                "created_at": date,
             }
         }
 
@@ -66,6 +66,7 @@ class UserInDBBase(UserBase):
 class UserOut(UserInDBBase):
     pass
 
+
 # # Additional properties stored in DB
-# class UserInDB(UserInDBBase):
-#     hashed_password: str
+class UserInDB(UserInDBBase):
+    hashed_password: str
