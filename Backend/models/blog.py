@@ -3,11 +3,17 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
-from database.connection import Base
+from database.base_class import Base
 
 
 class Blog(Base):
-    id = Column(Integer, primary_key=True, index=True, nullable=False, server_default="gen_random_uuid()")
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True,
+        nullable=False,
+        server_default="gen_random_uuid()",
+    )
     title = Column(String, index=True, nullable=False)
     body = Column(String, index=True, nullable=False)
     image = Column(String, index=True, nullable=False)
